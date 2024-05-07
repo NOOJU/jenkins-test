@@ -15,7 +15,7 @@ pipeline {
                 ansiblePlaybook(
                     installation: 'ansible-server', 
                     inventory: '/var/lib/jenkins/workspace/jenkins-test/ansible/hosts', 
-                    playbook: '/var/lib/jenkins/workspace/jenkins-test/ansible/playbook/auto-pass.yml'
+                    playbook: '/var/lib/jenkins/workspace/jenkins-test/ansible/playbook/auto_pass.yml'
                     )
             }
         }
