@@ -1,0 +1,31 @@
+---
+- name: create authority between jenkins-server and nodes
+  hosts: arista_node
+  connection: local
+  become: true
+  become_user: 'jenkins'
+  gather_facts: no
+
+  tasks:
+    - name: Ensure directory /var/lib/jenkins/.ssh exists
+      ansible.builtin.file:
+        path: /var/lib/jenkins/.ssh
+        state: directory
+        mode: '0700'  # SSH 디렉토리 보안을 위해 권한을 0700으로 설정
+
+    - name: Create known_hosts file if not exists
+      ansible.builtin.file:
+        path: /var/lib/jenkins/.ssh/known_hosts
+        state: touch
+        mode: '0644'  # 일반적으로 known_hosts 파일의 권한은 0644
+
+    - name: ssh-keyscan for known_hosts file
+      command: /usr/bin/ssh-keyscan -t ecdsa {{ ansible_host }}
+      register: keyscan
+
+    - name: input key
+      lineinfile:
+        path: /var/lib/jenkins/.ssh/known_hosts
+        line: "{{ item }}"
+        create: yes
+      with_items: "{{ keyscan.stdout_lines }}"
