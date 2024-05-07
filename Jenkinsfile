@@ -15,8 +15,6 @@ pipeline {
                     installation: 'ansible-server', 
                     inventory: '/var/lib/jenkins/workspace/jenkins-test/ansible/hosts', 
                     playbook: '/var/lib/jenkins/workspace/jenkins-test/ansible/playbook/vrf-vlan-test.yml'
-                    ## become: true,
-                    ## becomeUser: 'root'
                     )
             }
         }
