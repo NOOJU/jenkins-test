@@ -9,7 +9,20 @@ pipeline {
             }
         }
 
-        stage('Run Ansible Playbook') {
+
+        stage('Run autority-pass Playbook') {
+            steps {
+                ansiblePlaybook(
+                    installation: 'ansible-server', 
+                    inventory: '/var/lib/jenkins/workspace/jenkins-test/ansible/hosts', 
+                    playbook: '/var/lib/jenkins/workspace/jenkins-test/ansible/playbook/auto-pass.yml'
+                    )
+            }
+        }
+
+
+        
+        stage('Run config Playbook') {
             steps {
                 ansiblePlaybook(
                     installation: 'ansible-server', 
