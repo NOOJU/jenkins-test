@@ -8,7 +8,6 @@ pipeline {
                     url: 'https://github.com/NOOJU/jenkins-test.git'
             }
         }
-    }
 
         stage('Run Ansible Playbook') {
             steps {
@@ -19,6 +18,8 @@ pipeline {
                     )
             }
         }
+
+    }
         
     post {
         success {
