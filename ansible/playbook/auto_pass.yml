@@ -21,11 +21,11 @@
 
     - name: ssh-keyscan for known_hosts file
       command: /usr/bin/ssh-keyscan -t ecdsa {{ ansible_host }}
-      register: keyscan
+      register: keyscan  # host 키 읽어오기 
 
     - name: input key
       lineinfile:
         path: /var/lib/jenkins/.ssh/known_hosts
         line: "{{ item }}"
         create: yes
-      with_items: "{{ keyscan.stdout_lines }}"
+      with_items: "{{ keyscan.stdout_lines }}"  # known_hosts에 키 등록
