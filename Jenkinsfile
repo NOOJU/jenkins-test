@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    credentialsId: 'git-test',
+                    credentialsId: 'github_token',
                     url: 'https://github.com/NOOJU/jenkins-test.git'
             }
         }
