@@ -6,12 +6,12 @@
     # VRF variables
     vrf_base_name: "VRF"
     vrf_base_id: 1
-    vrf_count: 10
+    vrf_count: 50
     vrfs: "{{ range(vrf_base_id, vrf_base_id + vrf_count) | map('regex_replace', '^', vrf_base_name) | list }}"
 
     # VLAN variables
     vlan_base_id: 1
-    vlan_count: 10
+    vlan_count: 50
     vlans: "{{ range(vlan_base_id, vlan_base_id + vlan_count) | list }}"
 
   tasks:
