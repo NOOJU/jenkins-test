@@ -14,8 +14,8 @@ pipeline {
             steps {
                 ansiblePlaybook(
                     installation: 'ansible-server', 
-                    inventory: '/var/lib/jenkins/workspace/jenkins-test/host', 
-                    playbook: '/var/lib/jenkins/workspace/jenkins-test/vrf-vlan-test.yml'
+                    inventory: '/var/lib/jenkins/workspace/jenkins-test/ansible/hosts', 
+                    playbook: '/var/lib/jenkins/workspace/jenkins-test/ansible/playbook/vrf-vlan-test.yml'
                     )
             }
         }
