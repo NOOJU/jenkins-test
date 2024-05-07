@@ -13,24 +13,13 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 ansiblePlaybook(
-                    installation: 'ansible server', 
-                    inventory: '/var/lib/jenkins/workspace/an/host', 
-                    playbook: '/var/lib/jenkins/workspace/an/vrf'
+                    installation: 'ansible-server', 
+                    inventory: '/var/lib/jenkins/workspace/jenkins-test/host', 
+                    playbook: '/var/lib/jenkins/workspace/jenkins-test/vrf-vlan-test.yml'
                     )
             }
         }
         
-        stage('Playbook check') {
-            steps {
-                ansiblePlaybook(
-                    installation: 'ansible server', 
-                    inventory: '/var/lib/jenkins/workspace/an/host', 
-                    playbook: '/var/lib/jenkins/workspace/an/vrf_check'
-                    )
-            }
-        }
-    }
-
     post {
         success {
             echo 'Playbook executed successfully!'

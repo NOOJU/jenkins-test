@@ -1,0 +1,35 @@
+---
+- name: Configure VRFs and VLANs on Arista EOS devices
+  hosts: arista_node
+  gather_facts: no
+  vars:
+    # VRF variables
+    vrf_base_name: "VRF"
+    vrf_base_id: 1
+    vrf_count: 50
+    rd_base: "65000"
+    vrfs: "{{ range(vrf_base_id, vrf_base_id + vrf_count) | map('regex_replace', '^', vrf_base_name) | list }}"
+    rds: "{{ range(vrf_base_id, vrf_base_id + vrf_count) | map('string') | map('regex_replace', '^', rd_base + ':') | li
+st }}"
+
+    # VLAN variables
+    vlan_base_id: 1
+    vlan_count: 50
+    vlans: "{{ range(vlan_base_id, vlan_base_id + vlan_count) | list }}"
+    vlan_descriptions: "{{ range(vlan_base_id, vlan_base_id + vlan_count) | map('regex_replace', '^', 'VLAN_') | list }}
+"
+
+  tasks:
+    - name: Configure all VRFs in one task
+      arista.eos.eos_config:
+        lines: "{% for vrf, rd in vrfs | zip(rds) %}vrf instance {{ vrf }}\nrd {{ rd }}\ndescription Description for {{ 
+vrf }}\n{% endfor %}"
+        match: none
+        save_when: modified
+
+    - name: Configure all VLANs in one task
+      arista.eos.eos_config:
+        lines: "{% for vlan, description in vlans | zip(vlan_descriptions) %}vlan {{ vlan }}\nname {{ description }}\n{%
+ endfor %}"
+        match: none
+        save_when: modified
