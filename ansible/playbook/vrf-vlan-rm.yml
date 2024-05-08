@@ -2,17 +2,8 @@
 - name: Remove VRFs and VLANs on Arista EOS devices
   hosts: arista_node
   gather_facts: no
-  vars:
-    # VRF variables
-    vrf_base_name: "VRF"
-    vrf_base_id: 1
-    vrf_count: 50
-    vrfs: "{{ range(vrf_base_id, vrf_base_id + vrf_count) | map('regex_replace', '^', vrf_base_name) | list }}"
-
-    # VLAN variables
-    vlan_base_id: 1
-    vlan_count: 50
-    vlans: "{{ range(vlan_base_id, vlan_base_id + vlan_count) | list }}"
+  vars_files:
+    - variable.yml
 
   tasks:
     - name: Remove all VRFs in one task
