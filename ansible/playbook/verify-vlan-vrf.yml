@@ -22,11 +22,11 @@
     - name: Verify VRFs
       assert:
         that:
-          - "vrf_output.stdout_lines | length == {{ vrf_count }}"
+          - "vrf_output.stdout_lines | length == vrf_count"
         fail_msg: "VRF count mismatch. Expected {{ vrf_count }}, found {{ vrf_output.stdout_lines | length }}."
 
     - name: Verify VLANs
       assert:
         that:
-          - "vlan_output.stdout_lines | length == {{ vlan_count }}"
+          - "vlan_output.stdout_lines | length == vlan_count"
         fail_msg: "VLAN count mismatch. Expected {{ vlan_count }}, found {{ vlan_output.stdout_lines | length }}."
