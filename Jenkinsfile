@@ -10,7 +10,7 @@ pipeline {
         }
 
 
-        stage('Run autority-pass Playbook') {
+        stage('Insert autority data into jenkins-server') {
             steps {
                 ansiblePlaybook(
                     installation: 'ansible-server', 
@@ -32,8 +32,21 @@ pipeline {
             }
         }
 
-    }
+
         
+        stage('check configuration') {
+            steps {
+                ansiblePlaybook(
+                    installation: 'ansible-server', 
+                    inventory: '/var/lib/jenkins/workspace/jenkins-test/ansible/hosts', 
+                    playbook: '/var/lib/jenkins/workspace/jenkins-test/ansible/playbook/verify-vlan-vrf.yml'
+                    )
+            }
+        }
+
+    }
+
+    
     post {
         success {
             echo 'Playbook executed successfully!'
