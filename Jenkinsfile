@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage('Github Checkout') {
             steps {
                 git branch: 'main',
                     credentialsId: 'github_token',
@@ -10,7 +10,7 @@ pipeline {
         }
 
 
-        stage('Insert autority data into jenkins-server') {
+        stage('Auto autorize jenkins <-> ansible node') {
             steps {
                 ansiblePlaybook(
                     installation: 'ansible-server', 
@@ -34,7 +34,7 @@ pipeline {
 
 
         
-        stage('check configuration') {
+        stage('Check configuration') {
             steps {
                 ansiblePlaybook(
                     installation: 'ansible-server', 
