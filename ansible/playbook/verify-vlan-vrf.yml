@@ -3,7 +3,7 @@
   hosts: arista_node
   gather_facts: no
   vars_files:
-    - var.yml
+    - variable.yml
 
   tasks:
     - name: Check VRF configurations
