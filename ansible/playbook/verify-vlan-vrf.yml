@@ -1,42 +1,37 @@
 ---
-- name: Check and Configure Network
+- name: Verify VRF and VLAN configurations on Arista EOS devices
   hosts: arista_node
   gather_facts: no
-  vars:
-    vrf_count: 50
-    vlan_count: 50
+  vars_files:
+    - var.yml
 
   tasks:
-    - name: Collect VRF configurations
-      eos_command:
+    - name: Check VRF configurations
+      arista.eos.eos_command:
         commands:
           - show vrf
-      register: vrf_output
+      register: show_vrf_output
 
-    - name: Collect VLAN configurations
-      eos_command:
+    - name: Validate VRF configurations
+      set_fact:
+        vrf_results: "{{ vrf_results + [item ~ ' - configuration ' ~ ('OK' if item in show_vrf_output.stdout[0] else 'Fail')] }}"
+      loop: "{{ range(vrf_base_id, vrf_base_id + vrf_count) | map('regex_replace', '^', vrf_base_name) | list }}"
+
+    - name: Check VLAN configurations
+      arista.eos.eos_command:
         commands:
           - show vlan
-      register: vlan_output
+      register: show_vlan_output
 
+    - name: Validate VLAN configurations
+      set_fact:
+        vlan_results: "{{ vlan_results + ['VLAN ' ~ item ~ ' - configuration ' ~ ('OK' if 'VLAN_' ~ item in show_vlan_output.stdout[0] else 'Fail')] }}"
+      loop: "{{ range(vlan_base_id, vlan_base_id + vlan_count) | list }}"
 
-    - name: Display VRFs
+    - name: Display VRF configuration results
       debug:
-        msg: "VRFs configured: {{ vrf_output.stdout_lines }}"
+        msg: "{{ vrf_results }}"
 
-    - name: Display VLANs
+    - name: Display VLAN configuration results
       debug:
-        msg: "VLANs configured: {{ vlan_output.stdout_lines }}"
-
-
-    - name: Verify VRFs
-      assert:
-        that:
-          - "vrf_output.stdout_lines | length == vrf_count"
-        fail_msg: "VRF count mismatch. Expected {{ vrf_count }}, found {{ vrf_output.stdout_lines | length }}."
-
-    - name: Verify VLANs
-      assert:
-        that:
-          - "vlan_output.stdout_lines | length == vlan_count"
-        fail_msg: "VLAN count mismatch. Expected {{ vlan_count }}, found {{ vlan_output.stdout_lines | length }}."
+        msg: "{{ vlan_results }}"
