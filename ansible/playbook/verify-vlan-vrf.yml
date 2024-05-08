@@ -19,6 +19,16 @@
           - show vlan
       register: vlan_output
 
+
+    - name: Display VRFs
+      debug:
+        msg: "VRFs configured: {{ vrf_output.stdout_lines }}"
+
+    - name: Display VLANs
+      debug:
+        msg: "VLANs configured: {{ vlan_output.stdout_lines }}"
+
+
     - name: Verify VRFs
       assert:
         that:
