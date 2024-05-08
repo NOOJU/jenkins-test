@@ -1,0 +1,32 @@
+---
+- name: Check and Configure Network
+  hosts: arista_node
+  gather_facts: no
+  vars:
+    vrf_count: 50
+    vlan_count: 50
+
+  tasks:
+    - name: Collect VRF configurations
+      eos_command:
+        commands:
+          - show vrf
+      register: vrf_output
+
+    - name: Collect VLAN configurations
+      eos_command:
+        commands:
+          - show vlan
+      register: vlan_output
+
+    - name: Verify VRFs
+      assert:
+        that:
+          - "vrf_output.stdout_lines | length == {{ vrf_count }}"
+        fail_msg: "VRF count mismatch. Expected {{ vrf_count }}, found {{ vrf_output.stdout_lines | length }}."
+
+    - name: Verify VLANs
+      assert:
+        that:
+          - "vlan_output.stdout_lines | length == {{ vlan_count }}"
+        fail_msg: "VLAN count mismatch. Expected {{ vlan_count }}, found {{ vlan_output.stdout_lines | length }}."
