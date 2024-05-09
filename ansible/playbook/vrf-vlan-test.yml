@@ -3,7 +3,7 @@
   hosts: arista_node
   gather_facts: no
   vars_files:
-    - variable.yml
+    - vars/variable.yml
 
   tasks:
     - name: Configure all VRFs in one task
