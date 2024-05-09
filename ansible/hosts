@@ -7,3 +7,4 @@ ansible_ssh_pass=admin
 [arista_node]
 10.0.1.111
 10.0.2.222
+10.0.3.33
